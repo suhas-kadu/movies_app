@@ -1,0 +1,119 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:movies_app/models/movie.dart';
+
+class MoviesList extends StatefulWidget {
+  const MoviesList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<MoviesList> createState() => _MoviesListState();
+}
+
+class _MoviesListState extends State<MoviesList> {
+  // String _chosenMovie = ""
+  List<String> movies = [
+    "Guardians of the Galaxy Vol. 2",
+    "Finding Nemo",
+    "The Little Mermaid",
+    "The Meg"
+  ];
+  Movie movie = Movie(title: "", imgUrl: "", genre: "", rating: "");
+  List<Movie> moviesItem = [];
+  void getMoives(String title) async {
+    var url = Uri.parse("https://www.omdbapi.com/?t=$title&apikey=ed61efbf");
+    var response = await http.get(url);
+
+    var responseData = jsonDecode(response.body);
+    print(responseData);
+    setState(() {
+      Movie obj = Movie(
+          title: responseData["Title"],
+          imgUrl: responseData["Poster"],
+          genre: responseData["Genre"],
+          rating: responseData["Rated"]);
+      movie = obj;
+      moviesItem.add(movie);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    for (int i = 0; i < movies.length; i++) {
+      getMoives(movies[i]);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        // height: MediaQuery.of(context).size.height,
+
+        child: ListView.builder(
+            padding: EdgeInsets.all(16),
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            itemCount: moviesItem.length,
+            itemBuilder: (context, index) {
+              return Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: 125,
+                    margin: EdgeInsets.only(
+                      top: 60,
+                      bottom: 16,
+                    ),
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.lightBlue.shade200,
+                            offset: Offset(2, 8),
+                            spreadRadius: 2,
+                            blurRadius: 16,
+                          )
+                        ]),
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 120),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(moviesItem[index].title,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.5)),
+                          Text(moviesItem[index].genre,
+                              style: TextStyle(color: Colors.grey)),
+                          Text("Rating: ${moviesItem[index].rating}",
+                              style: TextStyle(color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                            moviesItem[index].imgUrl,
+                            height: 150,
+                          )),
+                    ),
+                  ),
+                ],
+              );
+            }));
+  }
+}

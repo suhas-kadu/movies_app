@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:movies_app/models/movie.dart';
+import 'package:movies_app/views/movie_description.dart';
+
 
 class MoviesList extends StatefulWidget {
   const MoviesList({
@@ -20,7 +22,17 @@ class _MoviesListState extends State<MoviesList> {
     "The Little Mermaid",
     "The Meg"
   ];
-  Movie movie = Movie(title: "", imgUrl: "", genre: "", rating: "");
+
+  Movie movie = Movie(
+      title: "",
+      imgUrl: "",
+      genre: "",
+      rating: "",
+      director: "",
+      plot: "",
+      actor: "",
+      runtime: "");
+
   List<Movie> moviesItem = [];
   void getMoives(String title) async {
     var url = Uri.parse("https://www.omdbapi.com/?t=$title&apikey=ed61efbf");
@@ -30,10 +42,16 @@ class _MoviesListState extends State<MoviesList> {
     print(responseData);
     setState(() {
       Movie obj = Movie(
-          title: responseData["Title"],
-          imgUrl: responseData["Poster"],
-          genre: responseData["Genre"],
-          rating: responseData["Rated"]);
+        title: responseData["Title"],
+        imgUrl: responseData["Poster"],
+        genre: responseData["Genre"],
+        rating: responseData["Rated"],
+        plot: responseData["Plot"],
+        director: responseData["Director"],
+        actor: responseData["Actors"],
+        runtime: responseData["Runtime"],
+      );
+
       movie = obj;
       moviesItem.add(movie);
     });
@@ -59,60 +77,74 @@ class _MoviesListState extends State<MoviesList> {
             physics: ClampingScrollPhysics(),
             itemCount: moviesItem.length,
             itemBuilder: (context, index) {
-              return Stack(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    height: 125,
-                    margin: EdgeInsets.only(
-                      top: 60,
-                      bottom: 16,
-                    ),
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.lightBlue.shade200,
-                            offset: Offset(2, 8),
-                            spreadRadius: 2,
-                            blurRadius: 16,
-                          )
-                        ]),
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 120),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(moviesItem[index].title,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.5)),
-                          Text(moviesItem[index].genre,
-                              style: TextStyle(color: Colors.grey)),
-                          Text("Rating: ${moviesItem[index].rating}",
-                              style: TextStyle(color: Colors.grey)),
-                        ],
+              return InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, MovieDescription.id, arguments: {
+                    "title": moviesItem[index].title,
+                    "genre": moviesItem[index].genre,
+                    "plot": moviesItem[index].plot,
+                    "director": moviesItem[index].director,
+                    "actors": moviesItem[index].actor,
+                    "runtime": moviesItem[index].runtime,
+                    "rating": moviesItem[index].rating,
+                    "imgUrl": moviesItem[index].imgUrl,
+                  });
+                },
+                child: Stack(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      height: 125,
+                      margin: EdgeInsets.only(
+                        top: 60,
+                        bottom: 16,
+                      ),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.lightBlue.shade200,
+                              offset: Offset(2, 8),
+                              spreadRadius: 2,
+                              blurRadius: 16,
+                            )
+                          ]),
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 120),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(moviesItem[index].title,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.5)),
+                            Text(moviesItem[index].genre,
+                                style: TextStyle(color: Colors.grey)),
+                            Text("Rating: ${moviesItem[index].rating}",
+                                style: TextStyle(color: Colors.grey)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 20,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            moviesItem[index].imgUrl,
-                            height: 150,
-                          )),
+                    Positioned(
+                      bottom: 20,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.network(
+                              moviesItem[index].imgUrl,
+                              height: 150,
+                            )),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             }));
   }

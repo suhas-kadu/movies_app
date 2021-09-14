@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:movies_app/models/movie.dart';
 import 'package:movies_app/views/movie_description.dart';
 
+
 class MoviesList extends StatefulWidget {
   const MoviesList({
     Key? key,
@@ -21,6 +22,7 @@ class _MoviesListState extends State<MoviesList> {
     "The Little Mermaid",
     "The Meg"
   ];
+
   Movie movie = Movie(
       title: "",
       imgUrl: "",
@@ -30,6 +32,7 @@ class _MoviesListState extends State<MoviesList> {
       plot: "",
       actor: "",
       runtime: "");
+
   List<Movie> moviesItem = [];
   void getMoives(String title) async {
     var url = Uri.parse("https://www.omdbapi.com/?t=$title&apikey=ed61efbf");
@@ -48,6 +51,7 @@ class _MoviesListState extends State<MoviesList> {
         actor: responseData["Actors"],
         runtime: responseData["Runtime"],
       );
+
       movie = obj;
       moviesItem.add(movie);
     });

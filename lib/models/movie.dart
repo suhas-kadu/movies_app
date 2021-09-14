@@ -17,4 +17,5 @@ class Movie {
       required this.genre,
       required this.rating,
       required this.runtime});
+
 }

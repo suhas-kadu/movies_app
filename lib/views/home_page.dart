@@ -5,6 +5,9 @@ import '../widgets/filters.dart';
 import '../widgets/movies_list.dart';
 
 class HomePage extends StatelessWidget {
+
+  static const String id = "home_page";
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

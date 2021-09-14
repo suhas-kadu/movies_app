@@ -8,5 +8,13 @@ class Movie {
   final String plot;
   final String runtime;
 
-  Movie({required this.director,required this.actor,required this.plot, required this.title, required this.imgUrl, required this.genre, required this.rating, required this.runtime});
+  Movie(
+      {required this.director,
+      required this.actor,
+      required this.plot,
+      required this.title,
+      required this.imgUrl,
+      required this.genre,
+      required this.rating,
+      required this.runtime});
 }

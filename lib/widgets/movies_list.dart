@@ -21,7 +21,15 @@ class _MoviesListState extends State<MoviesList> {
     "The Little Mermaid",
     "The Meg"
   ];
-  Movie movie = Movie(title: "", imgUrl: "", genre: "", rating: "", director: "", plot: "", actor: "", runtime: "");
+  Movie movie = Movie(
+      title: "",
+      imgUrl: "",
+      genre: "",
+      rating: "",
+      director: "",
+      plot: "",
+      actor: "",
+      runtime: "");
   List<Movie> moviesItem = [];
   void getMoives(String title) async {
     var url = Uri.parse("https://www.omdbapi.com/?t=$title&apikey=ed61efbf");
@@ -31,15 +39,15 @@ class _MoviesListState extends State<MoviesList> {
     print(responseData);
     setState(() {
       Movie obj = Movie(
-          title: responseData["Title"],
-          imgUrl: responseData["Poster"],
-          genre: responseData["Genre"],
-          rating: responseData["Rated"],
-          plot: responseData["Plot"],
-          director: responseData["Director"],
-          actor: responseData["Actors"],
-          runtime: responseData["Runtime"],
-          );
+        title: responseData["Title"],
+        imgUrl: responseData["Poster"],
+        genre: responseData["Genre"],
+        rating: responseData["Rated"],
+        plot: responseData["Plot"],
+        director: responseData["Director"],
+        actor: responseData["Actors"],
+        runtime: responseData["Runtime"],
+      );
       movie = obj;
       moviesItem.add(movie);
     });
@@ -67,9 +75,18 @@ class _MoviesListState extends State<MoviesList> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MovieDescription()));
+                  Navigator.pushNamed(context, MovieDescription.id, arguments: {
+                    "title": moviesItem[index].title,
+                    "genre": moviesItem[index].genre,
+                    "plot": moviesItem[index].plot,
+                    "director": moviesItem[index].director,
+                    "actors": moviesItem[index].actor,
+                    "runtime": moviesItem[index].runtime,
+                    "rating": moviesItem[index].rating,
+                    "imgUrl": moviesItem[index].imgUrl,
+                  });
                 },
-                              child: Stack(
+                child: Stack(
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import '../widgets/tabs.dart';
+import '../widgets/bottomnavbar.dart';
+import '../widgets/filters.dart';
+import '../widgets/movies_list.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -6,67 +10,52 @@ class HomePage extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: Colors.cyan.shade100,
         drawer: Drawer(),
         appBar: AppBar(
+          backgroundColor: Colors.cyan.shade100,
+          foregroundColor: Colors.black,
           elevation: 0,
-          title: Text("India"),
+          title: Text(
+            "Canada",
+            style: TextStyle(color: Colors.grey, fontSize: 14),
+          ),
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: TabBar(
-                indicatorSize: TabBarIndicatorSize.label,
-                isScrollable: true,
-                tabs: [
-                  Tab(
-                    text: "New",
-                  ),
-                  Tab(
-                    text: "Popular",
-                  ),
-                  Tab(
-                    text: "Upcoming",
-                  ),
-                ],
-              ),
+              child: Tabs(),
             ),
           ),
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.search),
+              child: Icon(
+                Icons.search,
+                color: Colors.red,
+              ),
             )
           ],
         ),
         body: TabBarView(
+          physics: ClampingScrollPhysics(),
           children: [
-            Container(),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Filters(),
+                  MoviesList(),
+                ],
+              ),
+            ),
             Container(),
             Container(),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(currentIndex: 0, items: [
-          BottomNavigationBarItem(
-            label: "",
-            icon: Icon(
-              Icons.home,
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.bookmark,
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-            ),
-            label: "",
-          )
-        ]),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }
 }
+

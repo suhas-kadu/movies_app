@@ -42,7 +42,8 @@ class MovieDescription extends StatelessWidget {
               ),
               Positioned(
                 top: 250,
-                right: 24,
+                left: 200,
+                right: 16,
                 child: FittedBox(
                   child: Container(
                     child: Column(
@@ -59,6 +60,7 @@ class MovieDescription extends StatelessWidget {
                           height: 8,
                         ),
                         Text("Director: ${movieData["director"]}",
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.grey,
                               fontWeight: FontWeight.w500,
@@ -107,7 +109,7 @@ class MovieDescription extends StatelessWidget {
                     ),
                   )),
               Positioned(
-                  top: MediaQuery.of(context).size.height / 2,
+                  top: MediaQuery.of(context).size.height / 1.75,
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),

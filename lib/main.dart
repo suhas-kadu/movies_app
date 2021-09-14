@@ -13,7 +13,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         textTheme: GoogleFonts.openSansTextTheme(
-          
+          Theme.of(context).textTheme.apply(
+          fontSizeFactor: 1.1,
+          fontSizeDelta: 1.5,
+        ),
         )
       ),
       home: HomePage(),
